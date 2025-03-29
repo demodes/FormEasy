@@ -1,0 +1,71 @@
+https://script.google.com/
+https://docs.google.com/spreadsheets/
+
+Vytvorit spreadsheet cez google na https://docs.google.com/spreadsheets/.
+V spreadsheete sa moze pridat script cez Extensions -> apps script, kedy sa automaticky prepoji dany spreadsheet s danym scriptom.
+Alebo sa moze zadefinovat spreadsheet id v Code.gs file.
+
+Nasledne sa vytvori script v https://script.google.com/
+V podstate sa skopiruje vsetko z github zlozky "src" do rovnako pomenovanych suborov na https://script.google.com.
+V Code.sg sa nastavia 2 veci:
+1)   setSpreadsheet(''); nastavi spravny spreadsheet ak nie je automaticky prepojeny (vid. vysie)
+2)   setEmail(''); nastavi email. adresu, kde sa budu posielat spravy z formularov
+
+Zvolil som postup, pri ktorom sa nevyuziva kniznica, lebo kod z kniznice som vlozil do FormEasy.gs suboru. Takto mam pod kontrolou ake subory(kod sa vlastne pouzivaju).
+Pri tomto pristupe nemozem volat metody s prefixom FormEasy. Takze normalne/defaultne by som napisal nieco take: FormEasy.setEmail('youremail@domain.com');
+Kedze ale nepouzivam kniznicu, tak musim pouzit funkciu bez prefixu (bez FormEasy.), a to takto: setEmail('youremail@domain.com');
+https://script.google.com/ vnima vsetky funkcie v jednom scope, aj ked su funkcie v roznych suboroch, tak akoby boli vsetky v jednom subore.
+This way, you'll have all the FormEasy functionality directly in your project in script.google.com without needing to reference an external library.
+
+Add the Code Directly
+Let's implement the FormEasy functionality directly in your script.google.com project:
+
+Create a New Google Apps Script Project
+0) Go to script.google.com
+1) Click "New Project"
+2) Rename your project to "FormEasy" (click on "Untitled project" at the top and change the name) or any other name.
+
+Create a new script file named FormEasy.gs in script.google.com:
+3) Open your target project in script.google.com where you want to use FormEasy functionality
+4) Click the "+" button next to "Files" in the left sidebar
+5) Select "Script"
+6) Name it "FormEasy.gs"
+7) Copy the entire FormEasy.gs content from github
+8) Paste it into the FormEasy.gs file in script.google.com
+9) Save the file (ctrl + s)
+
+Create the email template file in script.google.com:
+11) Click the "+" button next to "Files" again
+12) Select "HTML"
+13) Name it "EmailTemplate.html"
+14) Copy the HTML content from github EmailTemplate.html file
+15) Paste it into EmailTemplate.html file in script.google.com
+16) Save the file
+
+Create the Code.gs file in script.google.com:
+17) Copy the HTML content from github Code.gs file
+18) Paste it into Code.gs file in script.google.com
+19) Save the file
+
+Create the appsscript.json File in script.google.com:
+20) Click on "Project Settings" (gear icon)
+21) Click on "Show appsscript.json manifest file in editor"
+22) Return to the editor, and you should now see "appsscript.json" in your files list
+23) Open this file and replace its content with the appsscript.json content from github
+24) Save the file
+
+Configure the Project Settings
+25) Click on "Project Settings" (gear icon) in the left sidebar
+26) In the "General" tab, set the time zone to match the one in your appsscript.json file ("Europe/Prague")
+
+Deploy
+27) click the Deploy button at top right corner and select New deployment and select type: "Web app" from the gear icon.
+28) Select/fill the below options
+Description: (optional - moze byt "FormEasy"),
+Execute: as Me(your email)
+Who has access: Anyone
+29) Click Deploy button(authorize the script if you haven't done before) and you will get a URL under Web app, copy that, and it is going to be the end point for submitting the POST request.
+
+
+
+
