@@ -5,6 +5,13 @@ let email = '';
 let fields = [];
 let captcha = null;
 
+let activeSpreadsheet = null;
+
+// Add this function to your FormEasy.gs file
+function setSpreadsheet(spreadsheetId) {
+  activeSpreadsheet = SpreadsheetApp.openById(spreadsheetId);
+}
+
 /**
  * @param {String} name Name of the sheet to log the data
  */
@@ -43,9 +50,10 @@ function setFields(...fieldsArr) {
 
   let sheet;
 
+  // Then modify the relevant parts in your code to use this spreadsheet
   if (!sheetName) {
-    sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  } else sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+    sheet = activeSpreadsheet ? activeSpreadsheet.getActiveSheet() : SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  } else sheet = activeSpreadsheet ? activeSpreadsheet.getSheetByName(sheetName) : SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
 
   const firstRow = sheet.getDataRange().getValues()[0];
 
@@ -139,7 +147,8 @@ function action(req) {
 
   let logSheet;
 
-  const allSheets = SpreadsheetApp.getActiveSpreadsheet()
+  // Also update this section in the action function:
+  const allSheets = (activeSpreadsheet || SpreadsheetApp.getActiveSpreadsheet())
     .getSheets()
     .map((s) => s.getName());
 
@@ -152,9 +161,9 @@ function action(req) {
       };
       return ContentService.createTextOutput(JSON.stringify(response)).setMimeType(ContentService.MimeType.JSON);
     }
-    logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+    logSheet = (activeSpreadsheet || SpreadsheetApp.getActiveSpreadsheet()).getSheetByName(sheetName);
   } else {
-    logSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    logSheet = (activeSpreadsheet || SpreadsheetApp.getActiveSpreadsheet()).getActiveSheet();
   }
 
   if (fields.length < 1) {
